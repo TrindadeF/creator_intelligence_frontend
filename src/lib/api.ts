@@ -42,11 +42,20 @@ export default api;
 export const authApi = {
   login: async (email: string, password: string) => {
     const { data } = await axios.post(`${API_URL}/auth/login`, { email, password });
-    return data;
+    // API returns: { data: { user, token, refresh_token } }
+    return {
+      access_token:  data.data.token,
+      refresh_token: data.data.refresh_token,
+      user:          data.data.user,
+    };
   },
   register: async (name: string, email: string, password: string, niche?: string) => {
     const { data } = await axios.post(`${API_URL}/auth/register`, { name, email, password, niche });
-    return data;
+    return {
+      access_token:  data.data.token,
+      refresh_token: data.data.refresh_token,
+      user:          data.data.user,
+    };
   },
   logout: async () => {
     await api.post("/auth/logout");
@@ -54,7 +63,10 @@ export const authApi = {
   },
   refresh: async (refreshToken: string) => {
     const { data } = await axios.post(`${API_URL}/auth/refresh`, { refresh_token: refreshToken });
-    return data;
+    return {
+      access_token:  data.data.token,
+      refresh_token: data.data.refresh_token,
+    };
   },
 };
 
